@@ -1,0 +1,1673 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Trailhead</title>
+    <style>
+      :root {
+        --ink: #17211b;
+        --muted: #5d675f;
+        --paper: #fbfcf8;
+        --snow: #ffffff;
+        --pine: #204a36;
+        --pine-deep: #122d22;
+        --sage: #dfe8dc;
+        --sage-2: #edf2e9;
+        --sky: #d7edf3;
+        --water: #2c7380;
+        --granite: #6d7773;
+        --trail: #ad6d42;
+        --gold: #d7a84f;
+        --ember: #8f4f3f;
+        --line: rgba(23, 33, 27, 0.14);
+        --shadow: 0 18px 48px rgba(23, 33, 27, 0.15);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--ink);
+        background:
+          linear-gradient(180deg, rgba(251, 252, 248, 0.86), rgba(251, 252, 248, 0.97)),
+          url("sierra-nevada-background.png") center / cover fixed no-repeat,
+          var(--paper);
+      }
+
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+
+      button {
+        border: 0;
+        cursor: pointer;
+      }
+
+      .shell {
+        width: min(1220px, calc(100vw - 32px));
+        margin: 0 auto;
+        padding: 24px 0 46px;
+      }
+
+      header {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 18px;
+        align-items: end;
+        min-height: 230px;
+        padding: 30px;
+        color: white;
+        border-radius: 8px;
+        background:
+          linear-gradient(120deg, rgba(14, 38, 26, 0.92), rgba(32, 74, 54, 0.62), rgba(44, 115, 128, 0.46)),
+          url("sierra-nevada-background.png") center 44% / cover no-repeat;
+        box-shadow: var(--shadow);
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        margin-bottom: 10px;
+        font-size: clamp(2.8rem, 6vw, 5.6rem);
+        line-height: 0.9;
+        letter-spacing: 0;
+      }
+
+      h2 {
+        margin-bottom: 0;
+        font-size: 1.05rem;
+      }
+
+      h3 {
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+      }
+
+      .subtitle {
+        max-width: 760px;
+        margin-bottom: 0;
+        color: rgba(255, 255, 255, 0.88);
+        font-size: 1.04rem;
+      }
+
+      .trail-marker {
+        display: grid;
+        gap: 6px;
+        min-width: 190px;
+        padding: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.24);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.14);
+        backdrop-filter: blur(10px);
+        text-align: right;
+      }
+
+      .trail-marker strong {
+        font-size: 1.5rem;
+      }
+
+      .tabs {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+        margin: 20px 0;
+        padding: 6px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.78);
+      }
+
+      .tab {
+        min-height: 48px;
+        border-radius: 6px;
+        background: transparent;
+        color: var(--pine-deep);
+        font-weight: 850;
+      }
+
+      .tab.active {
+        background: var(--pine);
+        color: white;
+      }
+
+      .panel {
+        display: none;
+      }
+
+      .panel.active {
+        display: grid;
+        gap: 18px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .card {
+        grid-column: span 4;
+        min-width: 0;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 12px 34px rgba(23, 33, 27, 0.1);
+        overflow: hidden;
+      }
+
+      .wide {
+        grid-column: span 8;
+      }
+
+      .half {
+        grid-column: span 6;
+      }
+
+      .full {
+        grid-column: 1 / -1;
+      }
+
+      .card-head {
+        display: flex;
+        gap: 12px;
+        justify-content: space-between;
+        align-items: start;
+        padding: 18px 18px 10px;
+      }
+
+      .card-body {
+        padding: 0 18px 18px;
+      }
+
+      .metric {
+        display: grid;
+        gap: 10px;
+      }
+
+      .metric-value {
+        color: var(--pine-deep);
+        font-size: 2rem;
+        font-weight: 950;
+        line-height: 1;
+      }
+
+      .muted {
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .kicker {
+        color: var(--water);
+        font-size: 0.78rem;
+        font-weight: 900;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .meter {
+        height: 10px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: var(--sage);
+      }
+
+      .meter span {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--pine), var(--gold));
+      }
+
+      .split {
+        display: grid;
+        grid-template-columns: 300px minmax(0, 1fr);
+        gap: 16px;
+      }
+
+      .rail {
+        display: grid;
+        gap: 10px;
+        align-content: start;
+      }
+
+      .property-button {
+        display: grid;
+        gap: 5px;
+        width: 100%;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--ink);
+        text-align: left;
+      }
+
+      .property-button.active {
+        border-color: rgba(32, 74, 54, 0.62);
+        background: linear-gradient(180deg, #ffffff, var(--sage-2));
+        box-shadow: 0 10px 24px rgba(23, 33, 27, 0.12);
+      }
+
+      .property-name {
+        font-weight: 950;
+      }
+
+      .property-detail {
+        display: grid;
+        gap: 16px;
+      }
+
+      .detail-hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 14px;
+        padding: 18px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background:
+          linear-gradient(135deg, rgba(237, 242, 233, 0.96), rgba(215, 237, 243, 0.8)),
+          var(--snow);
+      }
+
+      .detail-hero h2 {
+        margin-top: 4px;
+        font-size: clamp(1.5rem, 3vw, 2.35rem);
+        line-height: 1;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      label {
+        display: grid;
+        gap: 6px;
+        color: var(--muted);
+        font-size: 0.82rem;
+        font-weight: 850;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        min-height: 42px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: white;
+        color: var(--ink);
+        padding: 10px 11px;
+      }
+
+      textarea {
+        min-height: 88px;
+        resize: vertical;
+      }
+
+      .span-2 {
+        grid-column: span 2;
+      }
+
+      .span-4 {
+        grid-column: 1 / -1;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .primary,
+      .secondary,
+      .danger {
+        min-height: 42px;
+        padding: 0 16px;
+        border-radius: 6px;
+        font-weight: 900;
+      }
+
+      .primary {
+        background: var(--pine);
+        color: white;
+      }
+
+      .secondary {
+        border: 1px solid var(--line);
+        background: white;
+        color: var(--pine-deep);
+      }
+
+      .danger {
+        background: var(--ember);
+        color: white;
+      }
+
+      .list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .item {
+        display: grid;
+        gap: 9px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(245, 247, 243, 0.78);
+      }
+
+      .item-top {
+        display: flex;
+        gap: 12px;
+        justify-content: space-between;
+        align-items: start;
+      }
+
+      .item-title {
+        font-weight: 950;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        min-height: 28px;
+        padding: 0 9px;
+        border-radius: 999px;
+        background: var(--sky);
+        color: #204650;
+        font-size: 0.82rem;
+        font-weight: 850;
+      }
+
+      .chip.gold {
+        background: #f3dfaa;
+        color: #5b4115;
+      }
+
+      .chip.sage {
+        background: var(--sage);
+        color: var(--pine-deep);
+      }
+
+      .chip.trail {
+        background: #f1d5be;
+        color: #5b2f16;
+      }
+
+      .item-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .icon-button {
+        width: 34px;
+        height: 34px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: white;
+        color: var(--pine-deep);
+        font-weight: 950;
+      }
+
+      .strategy-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .strategy {
+        display: grid;
+        gap: 10px;
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: linear-gradient(180deg, #ffffff, #f4f7ef);
+      }
+
+      .strategy ul {
+        margin: 0;
+        padding-left: 19px;
+        color: var(--muted);
+      }
+
+      .timeline {
+        display: grid;
+        gap: 10px;
+      }
+
+      .timeline-row {
+        display: grid;
+        grid-template-columns: 88px minmax(0, 1fr);
+        gap: 12px;
+        align-items: start;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.72);
+      }
+
+      .date-pill {
+        display: grid;
+        place-items: center;
+        min-height: 44px;
+        border-radius: 6px;
+        background: var(--pine);
+        color: white;
+        font-size: 0.82rem;
+        font-weight: 900;
+        text-align: center;
+      }
+
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 0 0;
+      }
+
+      .status-line {
+        min-height: 22px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 920px) {
+        header,
+        .split,
+        .grid,
+        .form-grid,
+        .strategy-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .tabs {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .trail-marker {
+          text-align: left;
+        }
+
+        .card,
+        .wide,
+        .half,
+        .full,
+        .span-2,
+        .span-4 {
+          grid-column: 1 / -1;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .shell {
+          width: min(100vw - 20px, 1220px);
+          padding-top: 10px;
+        }
+
+        header {
+          min-height: 220px;
+          padding: 22px;
+        }
+
+        .tabs {
+          grid-template-columns: 1fr;
+        }
+
+        .detail-hero,
+        .timeline-row {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header>
+        <div>
+          <div class="kicker">Chris Command Center evolves into</div>
+          <h1>Trailhead</h1>
+          <p class="subtitle">A daily launch point for personal readiness and property-centered conservation stewardship across the Sierra.</p>
+        </div>
+        <div class="trail-marker">
+          <span>Today</span>
+          <strong id="todayLabel">Loading</strong>
+          <span id="saveState">Saved locally</span>
+        </div>
+      </header>
+
+      <nav class="tabs" aria-label="Trailhead sections">
+        <button class="tab active" type="button" data-tab="dashboard">Daily Dashboard</button>
+        <button class="tab" type="button" data-tab="properties">Properties</button>
+        <button class="tab" type="button" data-tab="hawk">Project Hawk</button>
+        <button class="tab" type="button" data-tab="policy">Strategy and Policy</button>
+      </nav>
+
+      <section class="panel active" id="dashboardPanel">
+        <div class="grid">
+          <article class="card wide">
+            <div class="card-head">
+              <div>
+                <div class="kicker">Daily Dashboard</div>
+                <h2>Today at Trailhead</h2>
+              </div>
+              <span class="chip sage" id="dashboardPropertyCount">0 properties</span>
+            </div>
+            <div class="card-body">
+              <div class="timeline" id="dailyTimeline"></div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-head">
+              <h2>Mount Whitney</h2>
+            </div>
+            <div class="card-body metric">
+              <div class="metric-value" id="dashboardWhitneyDays">0 days</div>
+              <p class="muted" id="dashboardWhitneyNote">Countdown ready.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-head">
+              <h2>Next Property Visit</h2>
+            </div>
+            <div class="card-body metric">
+              <div class="metric-value" id="nextVisitDays">0 days</div>
+              <p class="muted" id="nextVisitNote">No visit scheduled.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-head">
+              <h2>Report Pipeline</h2>
+            </div>
+            <div class="card-body metric">
+              <div class="metric-value" id="openReports">0 open</div>
+              <p class="muted" id="reportSummary">Reports are current.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-head">
+              <h2>Readiness</h2>
+            </div>
+            <div class="card-body metric">
+              <div class="metric-value" id="readinessScore">0%</div>
+              <div class="meter" aria-label="Daily readiness score"><span id="readinessMeter"></span></div>
+              <p class="muted" id="readinessNote">Add Project Hawk logs to build the score.</p>
+            </div>
+          </article>
+
+          <article class="card half">
+            <div class="card-head">
+              <h2>Quick Daily Log</h2>
+              <span class="chip gold">Project Hawk</span>
+            </div>
+            <div class="card-body">
+              <form id="quickHawkForm" class="form-grid">
+                <label>
+                  Steps
+                  <input id="quickSteps" type="number" min="0" step="1" required>
+                </label>
+                <label>
+                  Weight
+                  <input id="quickWeight" type="number" min="0" step="0.1" required>
+                </label>
+                <label>
+                  Words
+                  <input id="quickWords" type="number" min="0" step="1" required>
+                </label>
+                <label>
+                  Tai Chi
+                  <select id="quickTaiChi">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                  </select>
+                </label>
+                <label class="span-2">
+                  Rowing minutes
+                  <input id="quickRowing" type="number" min="0" step="1">
+                </label>
+                <label class="span-2">
+                  Hike
+                  <input id="quickHike" type="text" placeholder="Trail, miles, elevation">
+                </label>
+                <label class="span-4">
+                  Energy notes
+                  <textarea id="quickEnergy" placeholder="What should future Chris know about today?"></textarea>
+                </label>
+                <div class="actions span-4">
+                  <button class="primary" type="submit">Save Today</button>
+                </div>
+              </form>
+            </div>
+          </article>
+
+          <article class="card half">
+            <div class="card-head">
+              <h2>Priority Properties</h2>
+              <span class="muted" id="priorityCount">0 active</span>
+            </div>
+            <div class="card-body">
+              <div class="list" id="priorityProperties"></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel" id="propertiesPanel">
+        <div class="split">
+          <aside class="rail">
+            <div class="card full">
+              <div class="card-head">
+                <h2>Property Portfolio</h2>
+                <span class="muted" id="propertyCount">0 properties</span>
+              </div>
+              <div class="card-body">
+                <div class="list" id="propertyRail"></div>
+              </div>
+            </div>
+          </aside>
+
+          <div class="property-detail">
+            <section class="detail-hero" id="propertyHero"></section>
+
+            <article class="card full">
+              <div class="card-head">
+                <h2>Property Workflow</h2>
+                <span class="chip sage">Monitoring site, landowner, county, access, photos, wildlife, report</span>
+              </div>
+              <div class="card-body">
+                <form id="propertyForm" class="form-grid">
+                  <input type="hidden" id="propertyId">
+                  <label>
+                    Property or monitoring site
+                    <input id="propertyName" type="text" required>
+                  </label>
+                  <label>
+                    Landowner
+                    <input id="propertyLandowner" type="text" required>
+                  </label>
+                  <label>
+                    County
+                    <input id="propertyCounty" type="text" required>
+                  </label>
+                  <label>
+                    Acres
+                    <input id="propertyAcres" type="number" min="0" step="1">
+                  </label>
+                  <label>
+                    Monitoring date
+                    <input id="propertyDate" type="date" required>
+                  </label>
+                  <label>
+                    Priority
+                    <select id="propertyPriority">
+                      <option>High</option>
+                      <option>Medium</option>
+                      <option>Low</option>
+                    </select>
+                  </label>
+                  <label>
+                    Report status
+                    <select id="propertyStatus">
+                      <option>Drafting</option>
+                      <option>Needs photos</option>
+                      <option>Ready for review</option>
+                      <option>Submitted</option>
+                    </select>
+                  </label>
+                  <label>
+                    Policy level
+                    <select id="propertyPolicyLevel">
+                      <option>Local</option>
+                      <option>State</option>
+                      <option>Federal</option>
+                    </select>
+                  </label>
+                  <label class="span-2">
+                    Wildlife observations
+                    <input id="propertyWildlife" type="text" placeholder="Tracks, birds, camera hits, seasonal movement">
+                  </label>
+                  <label class="span-2">
+                    Access notes
+                    <input id="propertyAccess" type="text" placeholder="Gate, road, key, landowner coordination">
+                  </label>
+                  <label class="span-2">
+                    Conservation strategy
+                    <textarea id="propertyStrategy" placeholder="What is the durable conservation move for this place?"></textarea>
+                  </label>
+                  <label class="span-2">
+                    Photo point notes
+                    <textarea id="propertyPhotoNotes" placeholder="Photo point condition, repeatability, restoration changes"></textarea>
+                  </label>
+                  <div class="actions span-4">
+                    <button class="primary" type="submit">Save Property</button>
+                    <button class="secondary" type="button" id="newProperty">New Property</button>
+                    <button class="danger" type="button" id="deleteProperty">Delete Selected</button>
+                  </div>
+                </form>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="hawkPanel">
+        <div class="grid">
+          <article class="card">
+            <div class="card-head">
+              <h2>Mount Whitney Countdown</h2>
+            </div>
+            <div class="card-body metric">
+              <div class="metric-value" id="whitneyDays">0 days</div>
+              <label>
+                Summit date
+                <input id="whitneyDate" type="date">
+              </label>
+              <p class="muted" id="whitneyNote">Set a target date for the climb.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-head">
+              <h2>Weight Goal</h2>
+            </div>
+            <div class="card-body metric">
+              <div class="metric-value" id="weightValue">0 lbs</div>
+              <div class="meter" aria-label="Weight progress toward 210 pounds"><span id="weightMeter"></span></div>
+              <p class="muted" id="weightSummary">Tracking toward 210 lbs.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-head">
+              <h2>Writing Streak</h2>
+            </div>
+            <div class="card-body metric">
+              <div class="metric-value" id="writingStreak">0 days</div>
+              <p class="muted">Days with 500 or more words.</p>
+              <div class="chips" id="practiceChips"></div>
+            </div>
+          </article>
+
+          <article class="card full">
+            <div class="card-head">
+              <h2>Project Hawk Readiness Log</h2>
+              <span class="chip sage">Steps, weight, Tai Chi, rowing, hikes, writing, energy</span>
+            </div>
+            <div class="card-body">
+              <form id="hawkForm" class="form-grid">
+                <input type="hidden" id="hawkId">
+                <label>
+                  Date
+                  <input id="hawkDate" type="date" required>
+                </label>
+                <label>
+                  Steps
+                  <input id="hawkSteps" type="number" min="0" step="1" required>
+                </label>
+                <label>
+                  Weight
+                  <input id="hawkWeight" type="number" min="0" step="0.1" required>
+                </label>
+                <label>
+                  Writing words
+                  <input id="hawkWords" type="number" min="0" step="1" required>
+                </label>
+                <label>
+                  Tai Chi
+                  <select id="hawkTaiChi">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                  </select>
+                </label>
+                <label>
+                  Rowing minutes
+                  <input id="hawkRowing" type="number" min="0" step="1">
+                </label>
+                <label class="span-2">
+                  Hike
+                  <input id="hawkHike" type="text" placeholder="Trail, miles, elevation">
+                </label>
+                <label class="span-4">
+                  Energy notes
+                  <textarea id="hawkEnergy" placeholder="Sleep, mood, soreness, training readiness"></textarea>
+                </label>
+                <div class="actions span-4">
+                  <button class="primary" type="submit">Save Log</button>
+                  <button class="secondary" type="button" id="clearHawk">Clear Form</button>
+                </div>
+              </form>
+            </div>
+          </article>
+
+          <article class="card full">
+            <div class="card-head">
+              <h2>Recent Project Hawk Entries</h2>
+              <span class="muted" id="hawkCount">0 entries</span>
+            </div>
+            <div class="card-body">
+              <div class="list" id="hawkList"></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel" id="policyPanel">
+        <div class="grid">
+          <article class="card full">
+            <div class="card-head">
+              <h2>Conservation Strategy</h2>
+              <span class="chip gold">Local, state, federal</span>
+            </div>
+            <div class="card-body strategy-grid" id="strategyList"></div>
+          </article>
+
+          <article class="card full">
+            <div class="card-head">
+              <h2>Land Trust Policy</h2>
+              <span class="chip gold">Local, state, federal</span>
+            </div>
+            <div class="card-body strategy-grid" id="policyList"></div>
+          </article>
+        </div>
+      </section>
+
+      <div class="toolbar">
+        <div class="status-line" id="statusLine">Trailhead stores data in this browser with localStorage.</div>
+        <div class="actions">
+          <button class="secondary" type="button" id="exportData">Export JSON</button>
+          <button class="danger" type="button" id="resetData">Reset Sample Data</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const STORE_KEY = "trailhead-command-center-v2";
+      const OLD_STORE_KEY = "chris-command-center-v1";
+      const todayIso = new Date().toISOString().slice(0, 10);
+
+      const sampleData = {
+        selectedPropertyId: "property-1",
+        hawk: {
+          whitneyDate: "2026-09-12",
+          logs: [
+            {
+              id: "hawk-1",
+              date: "2026-06-26",
+              steps: 12140,
+              weight: 224.1,
+              taiChi: "Yes",
+              rowing: 22,
+              hike: "Foothill tempo loop, 4.4 mi, warm finish",
+              words: 680,
+              energy: "Steady morning energy. Good uphill rhythm. Keep dinner lighter before early field days."
+            },
+            {
+              id: "hawk-2",
+              date: "2026-06-25",
+              steps: 11840,
+              weight: 224.6,
+              taiChi: "Yes",
+              rowing: 24,
+              hike: "Foothill loop, 4.2 mi, steady climb",
+              words: 650,
+              energy: "Good morning energy, calves a little tight, focus held after lunch."
+            },
+            {
+              id: "hawk-3",
+              date: "2026-06-24",
+              steps: 9300,
+              weight: 225.2,
+              taiChi: "No",
+              rowing: 18,
+              hike: "Neighborhood hills, 2.8 mi",
+              words: 510,
+              energy: "Lower sleep but productive. Keep evening snacks simple."
+            }
+          ]
+        },
+        properties: [
+          {
+            id: "property-1",
+            name: "Granite Meadow Preserve",
+            landowner: "Sierra Foothill Land Trust",
+            county: "Tulare",
+            acres: 1240,
+            date: "2026-07-02",
+            priority: "High",
+            status: "Drafting",
+            policyLevel: "State",
+            strategy: "Use monitoring photos and riparian recovery notes to strengthen a state resilience grant narrative.",
+            photoNotes: "Repeat Photo Points 1-4 after snowmelt. Watch willow recovery near the creek bend.",
+            wildlife: "Mule deer tracks, acorn woodpecker activity, possible bobcat scat",
+            access: "North gate combo confirmed. High-clearance recommended after rain."
+          },
+          {
+            id: "property-2",
+            name: "Pine Creek Easement",
+            landowner: "Martinez Family Ranch",
+            county: "Inyo",
+            acres: 680,
+            date: "2026-07-16",
+            priority: "High",
+            status: "Needs photos",
+            policyLevel: "Federal",
+            strategy: "Document working lands compatibility and match the property to NRCS habitat priorities.",
+            photoNotes: "Check old road prism and riparian exclusion fence from same boulder marker.",
+            wildlife: "Sage thrasher pair, fresh coyote tracks",
+            access: "Coordinate with landowner 48 hours ahead. Afternoon winds likely."
+          },
+          {
+            id: "property-3",
+            name: "Blue Oak Connector",
+            landowner: "County Open Space District",
+            county: "Mariposa",
+            acres: 920,
+            date: "2026-08-05",
+            priority: "Medium",
+            status: "Ready for review",
+            policyLevel: "Local",
+            strategy: "Use county connectivity goals to frame oak recruitment and fuel reduction as a corridor investment.",
+            photoNotes: "Document fuel reduction edge and oak recruitment cages.",
+            wildlife: "California quail, gray fox camera hit, raptor perch use",
+            access: "Public trailhead open. Service road locked at mile 1.3."
+          }
+        ],
+        strategy: [
+          {
+            level: "Local",
+            focus: "Make each property legible to county partners and nearby landowners.",
+            actions: ["Track willing landowners, access constraints, and adjacent corridor opportunities.", "Align monitoring dates with planning calendars and field-season realities.", "Use photo-point evidence to explain restoration needs in plain language."]
+          },
+          {
+            level: "State",
+            focus: "Translate property records into California climate, habitat, and wildfire resilience outcomes.",
+            actions: ["Package easement outcomes for state grant narratives.", "Track habitat connectivity, water, and fuels metrics by property.", "Coordinate with state wildlife and conservancy programs when monitoring suggests leverage."]
+          },
+          {
+            level: "Federal",
+            focus: "Tie durable land protection to partner funding and defensible public benefits.",
+            actions: ["Match properties to NRCS, USFS, and USFWS priorities.", "Document public benefits for match and compliance requirements.", "Maintain audit-ready monitoring, baseline, and report records."]
+          }
+        ],
+        policy: [
+          {
+            level: "Local",
+            focus: "Property work should be clean, neighbor-aware, and county-ready.",
+            actions: ["Confirm county noticing, access, and title constraints.", "Keep landowner communication logs current.", "Use plain-language stewardship expectations for reserved rights."]
+          },
+          {
+            level: "State",
+            focus: "Conservation commitments should satisfy California compliance and stewardship expectations.",
+            actions: ["Track conservation easement amendments carefully.", "Preserve monitoring records for accreditation and funder review.", "Flag water, fire, and habitat policy changes that affect stewardship."]
+          },
+          {
+            level: "Federal",
+            focus: "Protect charitable conservation value and long-term enforceability.",
+            actions: ["Keep appraisal, baseline, and donation files organized.", "Monitor IRS and federal conservation easement guidance.", "Document reserved rights and prohibited uses consistently."]
+          }
+        ]
+      };
+
+      let state = loadState();
+
+      const elements = {
+        todayLabel: document.querySelector("#todayLabel"),
+        saveState: document.querySelector("#saveState"),
+        statusLine: document.querySelector("#statusLine"),
+        dashboardPropertyCount: document.querySelector("#dashboardPropertyCount"),
+        dashboardWhitneyDays: document.querySelector("#dashboardWhitneyDays"),
+        dashboardWhitneyNote: document.querySelector("#dashboardWhitneyNote"),
+        dailyTimeline: document.querySelector("#dailyTimeline"),
+        nextVisitDays: document.querySelector("#nextVisitDays"),
+        nextVisitNote: document.querySelector("#nextVisitNote"),
+        openReports: document.querySelector("#openReports"),
+        reportSummary: document.querySelector("#reportSummary"),
+        readinessScore: document.querySelector("#readinessScore"),
+        readinessMeter: document.querySelector("#readinessMeter"),
+        readinessNote: document.querySelector("#readinessNote"),
+        priorityCount: document.querySelector("#priorityCount"),
+        priorityProperties: document.querySelector("#priorityProperties"),
+        quickHawkForm: document.querySelector("#quickHawkForm"),
+        propertyCount: document.querySelector("#propertyCount"),
+        propertyRail: document.querySelector("#propertyRail"),
+        propertyHero: document.querySelector("#propertyHero"),
+        propertyForm: document.querySelector("#propertyForm"),
+        whitneyDate: document.querySelector("#whitneyDate"),
+        whitneyDays: document.querySelector("#whitneyDays"),
+        whitneyNote: document.querySelector("#whitneyNote"),
+        weightValue: document.querySelector("#weightValue"),
+        weightMeter: document.querySelector("#weightMeter"),
+        weightSummary: document.querySelector("#weightSummary"),
+        writingStreak: document.querySelector("#writingStreak"),
+        practiceChips: document.querySelector("#practiceChips"),
+        hawkForm: document.querySelector("#hawkForm"),
+        hawkList: document.querySelector("#hawkList"),
+        hawkCount: document.querySelector("#hawkCount"),
+        strategyList: document.querySelector("#strategyList"),
+        policyList: document.querySelector("#policyList")
+      };
+
+      function loadState() {
+        const saved = localStorage.getItem(STORE_KEY);
+        if (saved) {
+          try {
+            return normalizeState(JSON.parse(saved));
+          } catch {
+            return structuredClone(sampleData);
+          }
+        }
+
+        const oldSaved = localStorage.getItem(OLD_STORE_KEY);
+        if (oldSaved) {
+          try {
+            return migrateOldState(JSON.parse(oldSaved));
+          } catch {
+            return structuredClone(sampleData);
+          }
+        }
+
+        return structuredClone(sampleData);
+      }
+
+      function normalizeState(nextState) {
+        const normalized = {
+          ...structuredClone(sampleData),
+          ...nextState
+        };
+
+        normalized.hawk = {
+          ...structuredClone(sampleData.hawk),
+          ...(nextState.hawk || {})
+        };
+
+        normalized.properties = Array.isArray(nextState.properties) ? nextState.properties : structuredClone(sampleData.properties);
+        normalized.strategy = Array.isArray(nextState.strategy) ? nextState.strategy : structuredClone(sampleData.strategy);
+        normalized.policy = Array.isArray(nextState.policy) ? nextState.policy : structuredClone(sampleData.policy);
+        normalized.selectedPropertyId = normalized.properties.some((property) => property.id === nextState.selectedPropertyId)
+          ? nextState.selectedPropertyId
+          : normalized.properties[0]?.id || "";
+
+        return normalized;
+      }
+
+      function migrateOldState(oldState) {
+        const migrated = structuredClone(sampleData);
+
+        if (oldState.hawk) {
+          migrated.hawk = {
+            ...migrated.hawk,
+            ...oldState.hawk
+          };
+        }
+
+        if (oldState.steward?.sites?.length) {
+          migrated.properties = oldState.steward.sites.map((site, index) => ({
+            id: site.id || `property-${index + 1}`,
+            name: site.name,
+            landowner: site.landowner,
+            county: site.county,
+            acres: site.acres || "",
+            date: site.date,
+            priority: index === 0 ? "High" : "Medium",
+            status: site.status,
+            policyLevel: index === 1 ? "Federal" : index === 2 ? "Local" : "State",
+            strategy: "Review monitoring evidence and align the next stewardship step with local, state, or federal leverage.",
+            photoNotes: site.photoNotes,
+            wildlife: site.wildlife,
+            access: site.access
+          }));
+          migrated.selectedPropertyId = migrated.properties[0]?.id || "";
+        }
+
+        if (oldState.steward?.strategy) {
+          migrated.strategy = oldState.steward.strategy;
+        }
+
+        if (oldState.steward?.policy) {
+          migrated.policy = oldState.steward.policy;
+        }
+
+        return migrated;
+      }
+
+      function saveState(message = "Saved locally") {
+        localStorage.setItem(STORE_KEY, JSON.stringify(state));
+        elements.saveState.textContent = message;
+        elements.statusLine.textContent = message;
+      }
+
+      function formatDate(dateString) {
+        if (!dateString) {
+          return "No date";
+        }
+
+        return new Date(`${dateString}T12:00:00`).toLocaleDateString(undefined, {
+          month: "short",
+          day: "numeric",
+          year: "numeric"
+        });
+      }
+
+      function shortDate(dateString) {
+        if (!dateString) {
+          return "TBD";
+        }
+
+        return new Date(`${dateString}T12:00:00`).toLocaleDateString(undefined, {
+          month: "short",
+          day: "numeric"
+        });
+      }
+
+      function daysUntil(dateString) {
+        const target = new Date(`${dateString}T00:00:00`);
+        const today = new Date(`${todayIso}T00:00:00`);
+        return Math.ceil((target - today) / 86400000);
+      }
+
+      function uid(prefix) {
+        return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+      }
+
+      function latestLogs() {
+        return [...state.hawk.logs].sort((a, b) => b.date.localeCompare(a.date));
+      }
+
+      function sortedProperties() {
+        const priorityOrder = { High: 0, Medium: 1, Low: 2 };
+        return [...state.properties].sort((a, b) => {
+          const priority = (priorityOrder[a.priority] ?? 9) - (priorityOrder[b.priority] ?? 9);
+          return priority || a.date.localeCompare(b.date);
+        });
+      }
+
+      function selectedProperty() {
+        return state.properties.find((property) => property.id === state.selectedPropertyId) || state.properties[0];
+      }
+
+      function renderDashboard() {
+        const properties = sortedProperties();
+        const next = [...state.properties]
+          .filter((property) => property.date)
+          .sort((a, b) => a.date.localeCompare(b.date))[0];
+        const open = state.properties.filter((property) => property.status !== "Submitted");
+        const highPriority = properties.filter((property) => property.priority === "High");
+        const readiness = calculateReadiness();
+        const whitneyDays = daysUntil(state.hawk.whitneyDate);
+
+        elements.dashboardPropertyCount.textContent = `${state.properties.length} propert${state.properties.length === 1 ? "y" : "ies"}`;
+        elements.dashboardWhitneyDays.textContent = whitneyDays >= 0 ? `${whitneyDays} days` : "Passed";
+        elements.dashboardWhitneyNote.textContent = `Target: ${formatDate(state.hawk.whitneyDate)}. Trail work and field work share the same legs.`;
+        elements.nextVisitDays.textContent = next ? `${daysUntil(next.date)} days` : "No date";
+        elements.nextVisitNote.textContent = next ? `${next.name}, ${next.county} County on ${formatDate(next.date)}.` : "Add a monitoring date to a property.";
+        elements.openReports.textContent = `${open.length} open`;
+        elements.reportSummary.textContent = open.length
+          ? `${open.filter((property) => property.status === "Needs photos").length} need photos, ${open.filter((property) => property.status === "Ready for review").length} ready for review.`
+          : "All property reports are submitted.";
+        elements.readinessScore.textContent = `${readiness.score}%`;
+        elements.readinessMeter.style.width = `${readiness.score}%`;
+        elements.readinessNote.textContent = readiness.note;
+        elements.priorityCount.textContent = `${highPriority.length} active`;
+        elements.priorityProperties.innerHTML = (highPriority.length ? highPriority : properties.slice(0, 3)).map(renderPriorityProperty).join("");
+        elements.dailyTimeline.innerHTML = renderDailyTimeline(next, open, readiness);
+      }
+
+      function renderDailyTimeline(next, open, readiness) {
+        const rows = [
+          {
+            date: "AM",
+            title: "Readiness launch",
+            body: readiness.note
+          },
+          {
+            date: next ? shortDate(next.date) : "TBD",
+            title: next ? `Next field visit: ${next.name}` : "Schedule the next field visit",
+            body: next ? `${next.landowner}. Access: ${next.access}` : "Pick a property and add the next monitoring date."
+          },
+          {
+            date: "Reports",
+            title: `${open.length} open stewardship reports`,
+            body: open.length ? open.map((property) => `${property.name}: ${property.status}`).join("; ") : "No open reports today."
+          }
+        ];
+
+        return rows.map((row) => `
+          <div class="timeline-row">
+            <div class="date-pill">${escapeHtml(row.date)}</div>
+            <div>
+              <div class="item-title">${escapeHtml(row.title)}</div>
+              <div class="muted">${escapeHtml(row.body)}</div>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      function calculateReadiness() {
+        const latest = latestLogs()[0];
+        if (!latest) {
+          return { score: 0, note: "Add Project Hawk logs to build the score." };
+        }
+
+        const stepScore = Math.min(35, (Number(latest.steps) / 12000) * 35);
+        const writingScore = Math.min(20, (Number(latest.words) / 500) * 20);
+        const taiChiScore = latest.taiChi === "Yes" ? 15 : 0;
+        const rowingScore = Math.min(15, (Number(latest.rowing || 0) / 25) * 15);
+        const hikeScore = latest.hike.trim() ? 15 : 0;
+        const score = Math.round(stepScore + writingScore + taiChiScore + rowingScore + hikeScore);
+
+        return {
+          score,
+          note: `${formatDate(latest.date)}: ${Number(latest.steps).toLocaleString()} steps, ${Number(latest.words).toLocaleString()} words, ${latest.taiChi} Tai Chi.`
+        };
+      }
+
+      function renderPriorityProperty(property) {
+        return `
+          <div class="item">
+            <div class="item-top">
+              <div>
+                <div class="item-title">${escapeHtml(property.name)}</div>
+                <div class="muted">${escapeHtml(property.landowner)} - ${escapeHtml(property.county)} County</div>
+              </div>
+              ${chip(property.priority, property.priority === "High" ? "trail" : "sage")}
+            </div>
+            <div class="chips">
+              ${chip(property.status, property.status === "Submitted" ? "gold" : "sage")}
+              ${chip(shortDate(property.date), "")}
+              ${chip(property.policyLevel, "gold")}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderProperties() {
+        const properties = sortedProperties();
+        const active = selectedProperty();
+        elements.propertyCount.textContent = `${state.properties.length} propert${state.properties.length === 1 ? "y" : "ies"}`;
+        elements.propertyRail.innerHTML = properties.map((property) => `
+          <button class="property-button ${active?.id === property.id ? "active" : ""}" type="button" data-select-property="${property.id}">
+            <span class="property-name">${escapeHtml(property.name)}</span>
+            <span class="muted">${escapeHtml(property.county)} County - ${escapeHtml(property.status)}</span>
+            <span class="chips">
+              ${chip(property.priority, property.priority === "High" ? "trail" : "sage")}
+              ${chip(shortDate(property.date), "")}
+            </span>
+          </button>
+        `).join("");
+
+        renderPropertyHero(active);
+        fillPropertyForm(active);
+      }
+
+      function renderPropertyHero(property) {
+        if (!property) {
+          elements.propertyHero.innerHTML = `
+            <div>
+              <div class="kicker">No property selected</div>
+              <h2>Add a property to begin</h2>
+              <p class="muted">Trailhead is organized around places: landowner, county, access, monitoring, photos, wildlife, strategy, and report status.</p>
+            </div>
+          `;
+          return;
+        }
+
+        elements.propertyHero.innerHTML = `
+          <div>
+            <div class="kicker">${escapeHtml(property.priority)} priority - ${escapeHtml(property.policyLevel)} policy lens</div>
+            <h2>${escapeHtml(property.name)}</h2>
+            <p class="muted">${escapeHtml(property.landowner)} - ${escapeHtml(property.county)} County - ${Number(property.acres || 0).toLocaleString()} acres</p>
+            <div class="chips">
+              ${chip(property.status, property.status === "Submitted" ? "gold" : "sage")}
+              ${chip(`Monitoring ${formatDate(property.date)}`, "")}
+              ${chip(property.policyLevel, "gold")}
+            </div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">${daysUntil(property.date)} days</div>
+            <p class="muted">until monitoring</p>
+          </div>
+        `;
+      }
+
+      function fillPropertyForm(property) {
+        elements.propertyForm.reset();
+        document.querySelector("#propertyId").value = property?.id || "";
+        document.querySelector("#propertyName").value = property?.name || "";
+        document.querySelector("#propertyLandowner").value = property?.landowner || "";
+        document.querySelector("#propertyCounty").value = property?.county || "";
+        document.querySelector("#propertyAcres").value = property?.acres || "";
+        document.querySelector("#propertyDate").value = property?.date || todayIso;
+        document.querySelector("#propertyPriority").value = property?.priority || "Medium";
+        document.querySelector("#propertyStatus").value = property?.status || "Drafting";
+        document.querySelector("#propertyPolicyLevel").value = property?.policyLevel || "Local";
+        document.querySelector("#propertyWildlife").value = property?.wildlife || "";
+        document.querySelector("#propertyAccess").value = property?.access || "";
+        document.querySelector("#propertyStrategy").value = property?.strategy || "";
+        document.querySelector("#propertyPhotoNotes").value = property?.photoNotes || "";
+      }
+
+      function renderHawk() {
+        const logs = latestLogs();
+        const latest = logs[0];
+        const target = 210;
+        const weights = state.hawk.logs.map((log) => Number(log.weight)).filter(Boolean);
+        const start = Math.max(...weights, target + 1);
+        const current = latest ? Number(latest.weight) : 0;
+        const progress = start === target ? 0 : Math.min(100, Math.max(0, ((start - current) / (start - target)) * 100));
+        const wordsStreak = countWritingStreak(logs);
+        const taiChiDays = logs.filter((log) => log.taiChi === "Yes").length;
+        const rowingMinutes = logs.reduce((sum, log) => sum + Number(log.rowing || 0), 0);
+        const hikingDays = logs.filter((log) => log.hike.trim()).length;
+
+        elements.whitneyDate.value = state.hawk.whitneyDate;
+        renderCountdown();
+        elements.weightValue.textContent = latest ? `${current.toFixed(1)} lbs` : "No weight";
+        elements.weightMeter.style.width = `${progress}%`;
+        elements.weightSummary.textContent = latest ? `${Math.max(0, current - target).toFixed(1)} lbs from 210.` : "Add a weight entry to start tracking.";
+        elements.writingStreak.textContent = `${wordsStreak} day${wordsStreak === 1 ? "" : "s"}`;
+        elements.practiceChips.innerHTML = [
+          chip(`${taiChiDays} Tai Chi`, "sage"),
+          chip(`${rowingMinutes} rowing min`, "gold"),
+          chip(`${hikingDays} hike days`, "")
+        ].join("");
+        elements.hawkCount.textContent = `${logs.length} entr${logs.length === 1 ? "y" : "ies"}`;
+        elements.hawkList.innerHTML = logs.map(renderHawkItem).join("");
+      }
+
+      function renderCountdown() {
+        const days = daysUntil(state.hawk.whitneyDate);
+        const label = days >= 0 ? `${days} day${days === 1 ? "" : "s"}` : "Summit date passed";
+        const note = days >= 0
+          ? `Target: ${formatDate(state.hawk.whitneyDate)}. Keep stacking steady days.`
+          : `Target was ${formatDate(state.hawk.whitneyDate)}. Set a new objective when ready.`;
+
+        elements.whitneyDays.textContent = label;
+        elements.whitneyNote.textContent = note;
+        elements.dashboardWhitneyDays.textContent = days >= 0 ? `${days} days` : "Passed";
+        elements.dashboardWhitneyNote.textContent = note;
+      }
+
+      function countWritingStreak(logs) {
+        let streak = 0;
+        for (const log of logs) {
+          if (Number(log.words) >= 500) {
+            streak += 1;
+          } else {
+            break;
+          }
+        }
+        return streak;
+      }
+
+      function renderHawkItem(log) {
+        return `
+          <div class="item">
+            <div class="item-top">
+              <div>
+                <div class="item-title">${formatDate(log.date)}</div>
+                <div class="muted">${escapeHtml(log.energy)}</div>
+              </div>
+              <div class="item-actions">
+                <button class="icon-button" type="button" title="Edit" data-edit-hawk="${log.id}">E</button>
+                <button class="icon-button" type="button" title="Delete" data-delete-hawk="${log.id}">X</button>
+              </div>
+            </div>
+            <div class="chips">
+              ${chip(`${Number(log.steps).toLocaleString()} steps`, "")}
+              ${chip(`${Number(log.weight).toFixed(1)} lbs`, "sage")}
+              ${chip(`${log.taiChi} Tai Chi`, log.taiChi === "Yes" ? "gold" : "")}
+              ${chip(`${Number(log.rowing || 0)} rowing min`, "")}
+              ${chip(`${Number(log.words).toLocaleString()} words`, Number(log.words) >= 500 ? "gold" : "")}
+            </div>
+            <div class="muted">${escapeHtml(log.hike || "No hike logged")}</div>
+          </div>
+        `;
+      }
+
+      function renderPolicy() {
+        elements.strategyList.innerHTML = state.strategy.map(renderStrategy).join("");
+        elements.policyList.innerHTML = state.policy.map(renderStrategy).join("");
+      }
+
+      function renderStrategy(entry) {
+        return `
+          <div class="strategy">
+            <h3>${escapeHtml(entry.level)}</h3>
+            <p class="muted">${escapeHtml(entry.focus)}</p>
+            <ul>
+              ${entry.actions.map((action) => `<li>${escapeHtml(action)}</li>`).join("")}
+            </ul>
+          </div>
+        `;
+      }
+
+      function chip(text, tone) {
+        return `<span class="chip ${tone}">${escapeHtml(text)}</span>`;
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function clearHawkForm() {
+        elements.hawkForm.reset();
+        document.querySelector("#hawkId").value = "";
+        document.querySelector("#hawkDate").value = todayIso;
+        document.querySelector("#hawkSteps").value = 10000;
+        document.querySelector("#hawkWeight").value = latestLogs()[0]?.weight || 225;
+        document.querySelector("#hawkWords").value = 500;
+      }
+
+      function clearQuickForm() {
+        const latest = latestLogs()[0];
+        elements.quickHawkForm.reset();
+        document.querySelector("#quickSteps").value = latest?.steps || 10000;
+        document.querySelector("#quickWeight").value = latest?.weight || 225;
+        document.querySelector("#quickWords").value = 500;
+        document.querySelector("#quickTaiChi").value = "Yes";
+      }
+
+      function renderAll() {
+        elements.todayLabel.textContent = new Date().toLocaleDateString(undefined, { month: "short", day: "numeric" });
+        renderDashboard();
+        renderProperties();
+        renderHawk();
+        renderPolicy();
+      }
+
+      function saveHawkLog(log, message) {
+        state.hawk.logs = state.hawk.logs.filter((entry) => entry.id !== log.id);
+        state.hawk.logs.push(log);
+        saveState(message);
+        renderAll();
+      }
+
+      document.querySelectorAll(".tab").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          document.querySelectorAll(".tab").forEach((button) => button.classList.remove("active"));
+          document.querySelectorAll(".panel").forEach((panel) => panel.classList.remove("active"));
+          tab.classList.add("active");
+          document.querySelector(`#${tab.dataset.tab}Panel`).classList.add("active");
+        });
+      });
+
+      elements.whitneyDate.addEventListener("change", () => {
+        state.hawk.whitneyDate = elements.whitneyDate.value;
+        saveState("Mount Whitney countdown updated");
+        renderAll();
+      });
+
+      elements.quickHawkForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const existingToday = state.hawk.logs.find((log) => log.date === todayIso);
+        saveHawkLog({
+          id: existingToday?.id || uid("hawk"),
+          date: todayIso,
+          steps: Number(document.querySelector("#quickSteps").value),
+          weight: Number(document.querySelector("#quickWeight").value),
+          taiChi: document.querySelector("#quickTaiChi").value,
+          rowing: Number(document.querySelector("#quickRowing").value || 0),
+          hike: document.querySelector("#quickHike").value.trim(),
+          words: Number(document.querySelector("#quickWords").value),
+          energy: document.querySelector("#quickEnergy").value.trim()
+        }, "Today saved to Project Hawk");
+        clearQuickForm();
+      });
+
+      elements.hawkForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const id = document.querySelector("#hawkId").value || uid("hawk");
+        saveHawkLog({
+          id,
+          date: document.querySelector("#hawkDate").value,
+          steps: Number(document.querySelector("#hawkSteps").value),
+          weight: Number(document.querySelector("#hawkWeight").value),
+          taiChi: document.querySelector("#hawkTaiChi").value,
+          rowing: Number(document.querySelector("#hawkRowing").value || 0),
+          hike: document.querySelector("#hawkHike").value.trim(),
+          words: Number(document.querySelector("#hawkWords").value),
+          energy: document.querySelector("#hawkEnergy").value.trim()
+        }, "Project Hawk log saved locally");
+        clearHawkForm();
+      });
+
+      elements.propertyForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const id = document.querySelector("#propertyId").value || uid("property");
+        const property = {
+          id,
+          name: document.querySelector("#propertyName").value.trim(),
+          landowner: document.querySelector("#propertyLandowner").value.trim(),
+          county: document.querySelector("#propertyCounty").value.trim(),
+          acres: Number(document.querySelector("#propertyAcres").value || 0),
+          date: document.querySelector("#propertyDate").value,
+          priority: document.querySelector("#propertyPriority").value,
+          status: document.querySelector("#propertyStatus").value,
+          policyLevel: document.querySelector("#propertyPolicyLevel").value,
+          wildlife: document.querySelector("#propertyWildlife").value.trim(),
+          access: document.querySelector("#propertyAccess").value.trim(),
+          strategy: document.querySelector("#propertyStrategy").value.trim(),
+          photoNotes: document.querySelector("#propertyPhotoNotes").value.trim()
+        };
+
+        state.properties = state.properties.filter((entry) => entry.id !== id);
+        state.properties.push(property);
+        state.selectedPropertyId = id;
+        saveState("Property workflow saved locally");
+        renderAll();
+      });
+
+      document.body.addEventListener("click", (event) => {
+        const propertyId = event.target.closest("[data-select-property]")?.dataset.selectProperty;
+        const hawkEdit = event.target.dataset.editHawk;
+        const hawkDelete = event.target.dataset.deleteHawk;
+
+        if (propertyId) {
+          state.selectedPropertyId = propertyId;
+          saveState("Selected property updated");
+          renderAll();
+        }
+
+        if (hawkEdit) {
+          const log = state.hawk.logs.find((entry) => entry.id === hawkEdit);
+          if (log) {
+            document.querySelector("#hawkId").value = log.id;
+            document.querySelector("#hawkDate").value = log.date;
+            document.querySelector("#hawkSteps").value = log.steps;
+            document.querySelector("#hawkWeight").value = log.weight;
+            document.querySelector("#hawkTaiChi").value = log.taiChi;
+            document.querySelector("#hawkRowing").value = log.rowing;
+            document.querySelector("#hawkHike").value = log.hike;
+            document.querySelector("#hawkWords").value = log.words;
+            document.querySelector("#hawkEnergy").value = log.energy;
+            elements.statusLine.textContent = `Editing Project Hawk entry from ${formatDate(log.date)}.`;
+          }
+        }
+
+        if (hawkDelete) {
+          state.hawk.logs = state.hawk.logs.filter((entry) => entry.id !== hawkDelete);
+          saveState("Project Hawk entry deleted");
+          renderAll();
+        }
+      });
+
+      document.querySelector("#newProperty").addEventListener("click", () => {
+        state.selectedPropertyId = "";
+        fillPropertyForm(null);
+        renderPropertyHero(null);
+        elements.statusLine.textContent = "Ready for a new property.";
+      });
+
+      document.querySelector("#deleteProperty").addEventListener("click", () => {
+        const active = selectedProperty();
+        if (!active) {
+          return;
+        }
+
+        state.properties = state.properties.filter((property) => property.id !== active.id);
+        state.selectedPropertyId = state.properties[0]?.id || "";
+        saveState(`${active.name} deleted`);
+        renderAll();
+      });
+
+      document.querySelector("#clearHawk").addEventListener("click", clearHawkForm);
+
+      document.querySelector("#exportData").addEventListener("click", () => {
+        const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "trailhead-data.json";
+        link.click();
+        URL.revokeObjectURL(url);
+        elements.statusLine.textContent = "Exported Trailhead data.";
+      });
+
+      document.querySelector("#resetData").addEventListener("click", () => {
+        state = structuredClone(sampleData);
+        saveState("Sample data restored");
+        clearHawkForm();
+        clearQuickForm();
+        renderAll();
+      });
+
+      clearHawkForm();
+      clearQuickForm();
+      renderAll();
+      saveState("Trailhead ready");
+    </script>
+  </body>
+</html>
